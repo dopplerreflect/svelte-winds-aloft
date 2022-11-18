@@ -1,15 +1,33 @@
 <script type="ts">
+	import { goto } from '$app/navigation';
 	let latlon = '';
+	$: valid = latlon.match(/^[\d]+\.[\d]+,[ ]*[-]?[\d]+\.[\d]+/);
 	$: coords = latlon
 		.replace(/ /g, '')
 		.split(',')
 		.map((s) => Number(s).toFixed(4));
+
+	const handleSubmit = () => {
+		if (valid) {
+			goto(`/${coords.join()}`);
+		}
+	};
 </script>
 
-<form method="get" action="/{coords.join()}">
-	<input type="text" id="latlon" bind:value={latlon} />
+<form on:submit|preventDefault={handleSubmit}>
+	<input
+		autocomplete="off"
+		class={valid ? '' : 'invalid'}
+		type="text"
+		id="latlon"
+		bind:value={latlon}
+	/>
 </form>
 
-<p>{latlon}</p>
-
 <code>{JSON.stringify(coords)}</code>
+
+<style>
+	input.invalid {
+		background-color: lightpink;
+	}
+</style>
