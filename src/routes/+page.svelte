@@ -1,7 +1,7 @@
 <script type="ts">
 	import { goto } from '$app/navigation';
 	let latlon = '';
-	$: valid = latlon.match(/^[\d]+\.[\d]+,[ ]*[-]?[\d]+\.[\d]+/);
+	$: valid = latlon.match(/^[\d]+\.[\d]+[, ]*[-]?[\d]+\.[\d]+[, \d]*/);
 	$: coords = latlon
 		.replace(/ /g, '')
 		.split(',')
