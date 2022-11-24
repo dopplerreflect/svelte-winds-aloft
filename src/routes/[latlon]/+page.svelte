@@ -6,6 +6,13 @@
 <div class="grid-container">
 	{#each data.forecasts as forecast}
 		<div>{forecast.header}</div>
+		<div class="grid-container inner">
+			{#each forecast.soundings as sounding}
+				<div>{sounding.height}</div>
+				<div>{sounding.direction}</div>
+				<div>{sounding.speed}</div>
+			{/each}
+		</div>
 	{/each}
 </div>
 <div>
@@ -16,8 +23,11 @@
 	.grid-container {
 		display: grid;
 	}
-	.grid-container div {
-		border: 1px solid grey;
+	.grid-container.outer {
+		grid-template-rows: 1em 1fr;
+	}
+	.grid-container.inner {
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 	code {
 		white-space: pre;
