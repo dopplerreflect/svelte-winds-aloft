@@ -1,5 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { parseForecastText } from '../../lib/server/forecast-parser';
+import { N_HRS } from '$lib/constants';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const [lat, lon] = params.latlon.split(',').map((s) => Number(s).toFixed(4));
@@ -7,7 +8,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const queryParams = {
 		data_source: 'Op40',
 		start: 'latest',
-		n_hrs: 3,
+		n_hrs: N_HRS,
 		airport: [lat, lon].join()
 	};
 
