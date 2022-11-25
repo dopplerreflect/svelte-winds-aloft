@@ -5,6 +5,7 @@
 	};
 	export let label: Label = { on: 'On', off: 'Off' };
 	export let checked: boolean = true;
+	export let disabled: boolean = false;
 </script>
 
 <div class="switch-with-label">
@@ -12,7 +13,7 @@
 		{checked ? label.on : label.off}
 	</div>
 	<label class="switch">
-		<input type="checkbox" bind:checked />
+		<input {disabled} type="checkbox" bind:checked />
 		<span class="slider round" />
 	</label>
 </div>

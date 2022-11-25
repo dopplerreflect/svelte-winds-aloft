@@ -8,7 +8,7 @@
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
-	let useAGL = true;
+	let useAGL = Number(data.alt) > 0 ? true : false;
 	let filter5km = true;
 
 	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m ${useAGL ? 'agl' : 'msl'}`;
@@ -19,12 +19,18 @@
 
 <header>
 	<ToggleSwitch bind:checked={useFeet} label={{ on: 'feet', off: 'meters' }} />
-	<ToggleSwitch bind:checked={useAGL} label={{ on: 'agl', off: 'msl' }} />
+	<ToggleSwitch
+		disabled={Number(data.alt) === 0}
+		bind:checked={useAGL}
+		label={{ on: 'agl', off: 'msl' }}
+	/>
 	<ToggleSwitch bind:checked={useMph} label={{ on: 'mph', off: 'kts' }} />
 	<ToggleSwitch bind:checked={useFarenheit} label={{ on: '°F', off: '°C' }} />
 	<ToggleSwitch bind:checked={filter5km} label={{ on: 'Max 5km', off: 'Max ∞' }} />
 </header>
-<div>Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}</div>
+<div>
+	Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'} alt: {data.alt}
+</div>
 <div class="grid-container outer">
 	{#each data.forecasts as forecast}
 		<div class="forecast">
