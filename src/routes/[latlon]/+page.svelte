@@ -44,19 +44,20 @@
 						{useFeet ? metersToFeet(sounding.height - heightAGL) : sounding.height - heightAGL}
 						{heightLabel}
 					</div>
-					<div class="direction">
-						{sounding.direction}°
-					</div>
-					<div>
-						<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
-					</div>
 					<div class="speed">
 						{useMph ? knotsToMph(sounding.speed) : sounding.speed}
 						{speedLabel}
 					</div>
+					<div>
+						<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
+					</div>
+					<div class="direction">
+						{sounding.direction}°
+					</div>
 					<div class="temperature">
-						{Math.round(Number(useFarenheit ? celsiusToFarenheit(sounding.temp) : sounding.temp))}
-						{temperatureLabel}
+						{Math.round(
+							Number(useFarenheit ? celsiusToFarenheit(sounding.temp) : sounding.temp)
+						)}{temperatureLabel}
 					</div>
 				</div>
 			{/each}
@@ -78,7 +79,7 @@
 	}
 	.grid-container.inner {
 		display: grid;
-		grid-template-columns: 9em 3em 1em 5em 1fr;
+		grid-template-columns: 1fr 5em 1em 3em 3em;
 		border-bottom: 1px solid lightgray;
 	}
 	.grid-container.inner div {

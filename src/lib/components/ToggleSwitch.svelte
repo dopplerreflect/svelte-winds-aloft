@@ -8,7 +8,7 @@
 </script>
 
 <div class="switch-with-label">
-	<div>
+	<div class="label">
 		{checked ? label.on : label.off}
 	</div>
 	<label class="switch">
@@ -20,7 +20,16 @@
 <style>
 	.switch-with-label {
 		display: inline-block;
-		width: 4em;
+		text-align: center;
+		width: 5em;
+		border: 1px solid black;
+		border-radius: 0.5em;
+		padding-bottom: 0.5em;
+	}
+	.label {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+			'Open Sans', 'Helvetica Neue', sans-serif;
+		text-align: center;
 	}
 	/* The switch - the box around the slider */
 	.switch {
@@ -46,8 +55,8 @@
 		right: 0;
 		bottom: 0;
 		background-color: #ccc;
-		-webkit-transition: 0.4s;
-		transition: 0.4s;
+		-webkit-transition: 0.25s;
+		transition: 0.25s;
 	}
 
 	.slider:before {
@@ -58,8 +67,8 @@
 		left: 0.15em;
 		bottom: 0.15em;
 		background-color: white;
-		-webkit-transition: 0.4s;
-		transition: 0.4s;
+		-webkit-transition: 0.25s;
+		transition: 0.25s;
 	}
 
 	input:checked + .slider {
