@@ -1,4 +1,4 @@
-import { N_HRS } from '$lib/constants';
+import { N_HRS, MONTHS } from '$lib/constants';
 
 export const parseForecastText = (text: string) => {
 	return [...text.split('\n\n')].slice(0, N_HRS).map((forecastText) => {
@@ -33,5 +33,11 @@ export const parseForecastText = (text: string) => {
 
 function parseInfo(s: string) {
 	const [type, hour, day, month, year] = s.split(/[\s]+/);
-	return { type, hour, day, month, year };
+	return {
+		type,
+		hour: Number(hour),
+		day: Number(day),
+		month: Number(MONTHS.get(month)!),
+		year: Number(year)
+	};
 }

@@ -3,7 +3,11 @@ import { parseForecastText } from '../../lib/server/forecast-parser';
 import { N_HRS } from '$lib/constants';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const [lat, lon] = params.latlon.split(',').map((s) => Number(s).toFixed(4));
+	let [lat, lon, alt] = params.latlon.split(',').map((s) => Number(s).toFixed(4));
+
+	if (!alt) {
+		alt = '0';
+	}
 
 	const queryParams = {
 		data_source: 'Op40',
@@ -23,7 +27,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const forecasts = parseForecastText(text);
 
-	return { forecasts };
+	return { forecasts, alt: Math.round(Number(alt)) };
 };
 
 /** from docs 
