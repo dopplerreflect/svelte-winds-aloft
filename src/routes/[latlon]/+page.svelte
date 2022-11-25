@@ -39,6 +39,7 @@
 					forecast.info.day,
 					forecast.info.hour
 				)}
+				({forecast.info.hour} UTC)
 			</div>
 			<div class="capecin">CAPE: {forecast.cape} CIN: {forecast.cin}</div>
 			{#each forecast.soundings.filter((s) => (filter16k ? s.height < 4877 : s)) as sounding}
