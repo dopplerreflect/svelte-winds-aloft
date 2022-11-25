@@ -7,11 +7,13 @@
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
+	let useAGL = true;
 	let filter16k = true;
 
-	$: heightLabel = useFeet ? 'ft' : 'm';
+	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m`;
 	$: speedLabel = useMph ? 'mph' : 'kts';
 	$: temperatureLabel = useFarenheit ? '°F' : '°C';
+	$: heightAGL = useAGL ? data.alt : 0;
 </script>
 
 <header>
@@ -21,10 +23,12 @@
 	<input id="useMph" type="checkbox" bind:checked={useMph} />
 	<label for="useFarenheit">Use °F</label>
 	<input id="useFarenheit" type="checkbox" bind:checked={useFarenheit} />
+	<label for="useAGL">Use AGL</label>
+	<input id="useAGL" type="checkbox" bind:checked={useAGL} />
 	<label for="filter16k">Filter 16k</label>
 	<input id="filter16k" type="checkbox" bind:checked={filter16k} />
 </header>
-<div>Ground elevation: {useFeet ? metersToFeet(data.alt) : data.alt}</div>
+<div>Ground elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}</div>
 <div class="grid-container outer">
 	{#each data.forecasts as forecast}
 		<div class="forecast">
@@ -40,7 +44,7 @@
 			{#each forecast.soundings.filter((s) => (filter16k ? s.height < 4877 : s)) as sounding}
 				<div class="grid-container inner">
 					<div class="height">
-						{useFeet ? metersToFeet(sounding.height - data.alt) : sounding.height - data.alt}
+						{useFeet ? metersToFeet(sounding.height - heightAGL) : sounding.height - heightAGL}
 						{heightLabel}
 					</div>
 					<div class="direction">
