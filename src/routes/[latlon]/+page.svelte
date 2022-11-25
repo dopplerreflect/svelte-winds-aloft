@@ -24,7 +24,7 @@
 	<ToggleSwitch bind:checked={useFarenheit} label={{ on: '°F', off: '°C' }} />
 	<ToggleSwitch bind:checked={filter5km} label={{ on: 'Max 5km', off: 'Max ∞' }} />
 </header>
-<div>Ground elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}</div>
+<div>Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}</div>
 <div class="grid-container outer">
 	{#each data.forecasts as forecast}
 		<div class="forecast">
