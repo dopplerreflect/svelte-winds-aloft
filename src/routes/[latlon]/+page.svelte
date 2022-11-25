@@ -11,7 +11,7 @@
 	let useAGL = true;
 	let filter5km = true;
 
-	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m`;
+	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m ${useAGL ? 'agl' : 'msl'}`;
 	$: speedLabel = useMph ? 'mph' : 'kts';
 	$: temperatureLabel = useFarenheit ? '°F' : '°C';
 	$: heightAGL = useAGL ? data.alt : 0;
@@ -19,9 +19,9 @@
 
 <header>
 	<ToggleSwitch bind:checked={useFeet} label={{ on: 'feet', off: 'meters' }} />
+	<ToggleSwitch bind:checked={useAGL} label={{ on: 'agl', off: 'msl' }} />
 	<ToggleSwitch bind:checked={useMph} label={{ on: 'mph', off: 'kts' }} />
 	<ToggleSwitch bind:checked={useFarenheit} label={{ on: '°F', off: '°C' }} />
-	<ToggleSwitch bind:checked={useAGL} label={{ on: 'agl', off: 'msl' }} />
 	<ToggleSwitch bind:checked={filter5km} label={{ on: 'Max 5km', off: 'Max ∞' }} />
 </header>
 <div>Ground elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}</div>
@@ -46,6 +46,8 @@
 					</div>
 					<div class="direction">
 						{sounding.direction}°
+					</div>
+					<div>
 						<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
 					</div>
 					<div class="speed">
@@ -76,17 +78,21 @@
 	}
 	.grid-container.inner {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: 9em 3em 1em 5em 1fr;
 		border-bottom: 1px solid lightgray;
 	}
 	.grid-container.inner div {
 		margin-right: 0.5em;
+		border-right: 1px solid lightgray;
 	}
 	.forecast {
-		border-left: 1px solid lightgray;
+		border-left: 2px solid black;
 	}
 	.forecast:last-child {
-		border-right: 1px solid lightgray;
+		border-right: 2px solid black;
+	}
+	.direction {
+		text-align: right;
 	}
 	.datetime {
 		background-color: lightblue;
