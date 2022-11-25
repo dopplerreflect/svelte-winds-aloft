@@ -20,7 +20,7 @@
 	<label for="filter16k">Filter 16k</label>
 	<input type="checkbox" bind:checked={filter16k} />
 </header>
-<div>{data.alt}</div>
+<div>Ground elevation: {useFeet ? metersToFeet(data.alt) : data.alt} {heightLabel}</div>
 <div class="grid-container outer">
 	{#each data.forecasts as forecast}
 		<div class="forecast">
@@ -39,7 +39,10 @@
 						{useFeet ? metersToFeet(sounding.height - data.alt) : sounding.height - data.alt}
 						{heightLabel}
 					</div>
-					<div>{sounding.direction}</div>
+					<div>
+						{sounding.direction}
+						<div class="arrow" style="transform:rotate({sounding.direction}deg)">&#8659;</div>
+					</div>
 					<div>{useMph ? knotsToMph(sounding.speed) : sounding.speed} {speedLabel}</div>
 				{/each}
 			</div>
@@ -68,6 +71,9 @@
 	}
 	.forecast:last-child {
 		border-right: none;
+	}
+	.arrow {
+		display: inline-block;
 	}
 	code {
 		white-space: pre;
