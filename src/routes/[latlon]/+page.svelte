@@ -61,9 +61,10 @@
 	{/each}
 </div>
 
-<!-- <div>
+<div>
 	<code>{JSON.stringify(data.forecasts, null, 2)}</code>
-</div> -->
+</div>
+
 <style>
 	.grid-container {
 		font-family: 'Courier New', Courier, monospace;

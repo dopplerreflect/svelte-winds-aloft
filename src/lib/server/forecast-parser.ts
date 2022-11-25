@@ -7,13 +7,20 @@ export const parseForecastText = (text: string) => {
 
 		let info = parseInfo(_info);
 		let [, cape, , cin] = _capecin.split(/[\s]+/);
+		let [type, pressure, height, temp, dewpt, direction, speed] = _surface
+			.split(/[\s]+/)
+			.map((v) => Number(v));
+		let surface = { height, temp: temp / 10, dewpt: dewpt / 10, direction, speed };
 
-		const soundings = rest.map((t) => {
-			const [type, pressure, height, temp, dewpt, direction, speed] = t
-				.split(/[\s]+/)
-				.map((v) => Number(v));
-			return { height, temp: temp / 10, dewpt: dewpt / 10, direction, speed };
-		});
+		let soundings = [
+			surface,
+			...rest.map((t) => {
+				let [type, pressure, height, temp, dewpt, direction, speed] = t
+					.split(/[\s]+/)
+					.map((v) => Number(v));
+				return { height, temp: temp / 10, dewpt: dewpt / 10, direction, speed };
+			})
+		];
 		return {
 			header,
 			_info,
