@@ -17,16 +17,26 @@
 </script>
 
 <header>
-	<label for="useFeet">Use Feet</label>
-	<input id="useFeet" type="checkbox" bind:checked={useFeet} />
-	<label for="useMph">Use MPH</label>
-	<input id="useMph" type="checkbox" bind:checked={useMph} />
-	<label for="useFarenheit">Use °F</label>
-	<input id="useFarenheit" type="checkbox" bind:checked={useFarenheit} />
-	<label for="useAGL">Use AGL</label>
-	<input id="useAGL" type="checkbox" bind:checked={useAGL} />
-	<label for="filter16k">Filter 16k</label>
-	<input id="filter16k" type="checkbox" bind:checked={filter16k} />
+	<label for="useFeet"
+		>Use Feet
+		<input id="useFeet" type="checkbox" bind:checked={useFeet} />
+	</label>
+	<label for="useMph"
+		>Use MPH
+		<input id="useMph" type="checkbox" bind:checked={useMph} />
+	</label>
+	<label for="useFarenheit"
+		>Use °F
+		<input id="useFarenheit" type="checkbox" bind:checked={useFarenheit} />
+	</label>
+	<label for="useAGL"
+		>Use AGL
+		<input id="useAGL" type="checkbox" bind:checked={useAGL} />
+	</label>
+	<label for="filter16k"
+		>Filter 16k
+		<input id="filter16k" type="checkbox" bind:checked={filter16k} />
+	</label>
 </header>
 <div>Ground elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}</div>
 <div class="grid-container outer">
@@ -71,6 +81,17 @@
 </div>
 
 <style>
+	label {
+		border: 1px solid black;
+		border-radius: 0.25em;
+		padding: 0.25em;
+		margin-right: 0.25em;
+		background-color: lightgray;
+	}
+	label:hover {
+		cursor: pointer;
+		background-color: lightblue;
+	}
 	.grid-container {
 		font-family: 'Courier New', Courier, monospace;
 	}
