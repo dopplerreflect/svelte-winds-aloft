@@ -1,24 +1,28 @@
 <script type="ts">
 	import type { PageData } from './$types';
-	import { metersToFeet, knotsToMph, toLocalTime } from '$lib/conversions';
+	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
 
 	export let data: PageData;
 
 	let useFeet = true;
 	let useMph = true;
+	let useFarenheit = true;
 	let filter16k = true;
 
 	$: heightLabel = useFeet ? 'ft' : 'm';
 	$: speedLabel = useMph ? 'mph' : 'kts';
+	$: temperatureLabel = useFarenheit ? '°F' : '°C';
 </script>
 
 <header>
 	<label for="useFeet">Use Feet</label>
-	<input type="checkbox" bind:checked={useFeet} />
+	<input id="useFeet" type="checkbox" bind:checked={useFeet} />
 	<label for="useMph">Use MPH</label>
-	<input type="checkbox" bind:checked={useMph} />
+	<input id="useMph" type="checkbox" bind:checked={useMph} />
+	<label for="useFarenheit">Use °F</label>
+	<input id="useFarenheit" type="checkbox" bind:checked={useFarenheit} />
 	<label for="filter16k">Filter 16k</label>
-	<input type="checkbox" bind:checked={filter16k} />
+	<input id="filter16k" type="checkbox" bind:checked={filter16k} />
 </header>
 <div>Ground elevation: {useFeet ? metersToFeet(data.alt) : data.alt} {heightLabel}</div>
 <div class="grid-container outer">
@@ -40,10 +44,14 @@
 						{heightLabel}
 					</div>
 					<div>
-						{sounding.direction}
-						<div class="arrow" style="transform:rotate({sounding.direction}deg)">&#8659;</div>
+						{sounding.direction}°
+						<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
 					</div>
 					<div>{useMph ? knotsToMph(sounding.speed) : sounding.speed} {speedLabel}</div>
+					<div>
+						{Math.round(Number(useFarenheit ? celsiusToFarenheit(sounding.temp) : sounding.temp))}
+						{temperatureLabel}
+					</div>
 				{/each}
 			</div>
 		</div>
@@ -62,7 +70,7 @@
 	}
 	.grid-container.inner {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: repeat(4, 1fr);
 	}
 	.forecast {
 		border-right: 1px solid black;
