@@ -9,9 +9,12 @@ export const load: PageServerLoad = async ({ params }) => {
 		alt = '0';
 	}
 
+	let date = Date.now();
 	const queryParams = {
 		data_source: 'Op40',
-		start: 'latest',
+		fcst_len: 'shortest',
+		startSecs: Math.round(Date.now() / 1000) - 3600,
+		endSecs: Math.round(Date.now() / 1000) - 3600 + 60 * 60 * N_HRS,
 		n_hrs: N_HRS,
 		airport: [lat, lon].join()
 	};
@@ -22,6 +25,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const url = `https://rucsoundings.noaa.gov/get_soundings.cgi?${queryString}`;
 
+	console.log(url);
 	const result = await fetch(url);
 	const text = await result.text();
 
