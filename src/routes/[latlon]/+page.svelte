@@ -15,6 +15,16 @@
 	$: speedLabel = useMph ? 'mph' : 'kts';
 	$: temperatureLabel = useFarenheit ? '°F' : '°C';
 	$: heightAGL = useAGL ? data.alt : 0;
+
+	function highlightInversion(fi: number, si: number): string {
+		if (si > 0) {
+			let forecast = data.forecasts[fi];
+			let curTemp = forecast.soundings[si].temp;
+			let prevTemp = forecast.soundings[si - 1].temp;
+			if (curTemp >= prevTemp) return 'highlight';
+		}
+		return '';
+	}
 </script>
 
 <header>
@@ -32,7 +42,7 @@
 	Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}
 </div>
 <div class="grid-container outer">
-	{#each data.forecasts as forecast}
+	{#each data.forecasts as forecast, fi}
 		<div class="forecast">
 			<div class="datetime">
 				{toLocalTime(
@@ -44,7 +54,7 @@
 				({forecast.info.hour} UTC)
 			</div>
 			<div class="capecin">CAPE: {forecast.cape} CIN: {forecast.cin}</div>
-			{#each forecast.soundings.filter((s) => (filter5km ? s.height < 5000 : s)) as sounding}
+			{#each forecast.soundings.filter((s) => (filter5km ? s.height < 5000 : s)) as sounding, si}
 				<div class="grid-container inner">
 					<div class="height">
 						{useFeet ? metersToFeet(sounding.height - heightAGL) : sounding.height - heightAGL}
@@ -60,7 +70,7 @@
 					<div class="direction">
 						{sounding.direction}°
 					</div>
-					<div class="temperature">
+					<div class="temperature {highlightInversion(fi, si)}">
 						{Math.round(
 							Number(useFarenheit ? celsiusToFarenheit(sounding.temp) : sounding.temp)
 						)}{temperatureLabel}
@@ -111,6 +121,9 @@
 	}
 	.arrow {
 		display: inline-block;
+	}
+	.temperature.highlight {
+		background-color: lightgoldenrodyellow;
 	}
 	code {
 		white-space: pre;
