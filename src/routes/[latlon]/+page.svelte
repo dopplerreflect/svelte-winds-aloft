@@ -29,7 +29,7 @@
 	<ToggleSwitch bind:checked={filter5km} label={{ on: 'Max 5km', off: 'Max ∞' }} />
 </header>
 <div>
-	Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'} alt: {data.alt}
+	Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}
 </div>
 <div class="grid-container outer">
 	{#each data.forecasts as forecast}
@@ -71,10 +71,9 @@
 	{/each}
 </div>
 
-<div>
+<!-- <div>
 	<code>{JSON.stringify(data.forecasts, null, 2)}</code>
-</div>
-
+</div> -->
 <style>
 	.grid-container {
 		font-family: 'Courier New', Courier, monospace;
