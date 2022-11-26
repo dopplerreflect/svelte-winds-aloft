@@ -84,12 +84,15 @@
 	}
 	.grid-container.inner {
 		display: grid;
-		grid-template-columns: 1fr 5em 1em 3em 3em;
+		grid-template-columns: 1fr 5em 2em 3em 3em;
 		border-bottom: 1px solid lightgray;
 	}
 	.grid-container.inner div {
 		margin-right: 0.5em;
 		border-right: 1px solid lightgray;
+	}
+	.grid-container.inner:hover {
+		background-color: lightgray;
 	}
 	.forecast {
 		border-left: 2px solid black;
