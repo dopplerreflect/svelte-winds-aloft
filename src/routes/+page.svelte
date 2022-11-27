@@ -29,7 +29,6 @@
 			.join('&');
 
 		const url = `https://nationalmap.gov/epqs/pqs.php?${queryStr}`;
-		console.log(url);
 		const response = await fetch(url);
 		const json = await response.json();
 		return json.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation;
@@ -44,6 +43,7 @@
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			}).addTo(map);
 			let marker = L.marker([lat, lon]).addTo(map);
+			alt = await setElevation();
 			map.on('click', async (e) => {
 				lat = Number(e.latlng.lat.toFixed(4));
 				lon = Number(e.latlng.lng.toFixed(4));
