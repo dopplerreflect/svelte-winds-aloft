@@ -1,6 +1,12 @@
 <script type="ts">
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	let latlon = '33.9769, -85.1703';
+	let lat = 33.9769;
+	let lon = -85.1703;
+	let alt = 0;
+	let status = '';
+	$: latlon = [lat, lon, alt].join(',');
 	$: valid = latlon.match(/^[\d]+\.[\d]+[, ]*[-]?[\d]+\.[\d]+[, \d]*/);
 	$: coords = latlon
 		.replace(/ /g, '')
@@ -9,24 +15,99 @@
 
 	const handleSubmit = () => {
 		if (valid) {
+			status = 'Fetching winds aloft data';
 			goto(`/${coords.join()}`);
 		}
 	};
+
+	const setElevation = async () => {
+		status = 'Getting elevation';
+		const queryStr = Object.entries({
+			x: lon,
+			y: lat,
+			units: 'Meters',
+			output: 'json'
+		})
+			.map((e) => e.join('='))
+			.join('&');
+
+		const url = `https://nationalmap.gov/epqs/pqs.php?${queryStr}`;
+		const response = await fetch(url);
+		const json = await response.json();
+		status = '';
+		return json.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation;
+	};
+
+	onMount(async () => {
+		if (browser) {
+			navigator.geolocation.getCurrentPosition((p) => {
+				(lat = p.coords.latitude), (lon = p.coords.longitude);
+			});
+
+			const leaflet = await import('leaflet');
+			let map = leaflet.map('map').setView([lat, lon], 14);
+			leaflet
+				.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					maxZoom: 19,
+					attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+				})
+				.addTo(map);
+
+			let marker = leaflet.marker([lat, lon], { draggable: true }).addTo(map);
+
+			async function resetLatLon() {
+				let latlng = marker.getLatLng();
+				lat = Number(latlng.lat.toFixed(4));
+				lon = Number(latlng.lng.toFixed(4));
+				alt = await setElevation();
+			}
+
+			marker.on('dragend', resetLatLon);
+
+			alt = await setElevation();
+		}
+	});
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
-	<input
-		autocomplete="off"
-		class={valid ? '' : 'invalid'}
-		type="text"
-		id="latlon"
-		bind:value={latlon}
+<svelte:head>
+	<link
+		rel="stylesheet"
+		href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+		crossorigin=""
 	/>
-</form>
+</svelte:head>
 
-<code>{JSON.stringify(coords)}</code>
+<header>
+	<form on:submit|preventDefault={handleSubmit}>
+		<input
+			autocomplete="off"
+			class={valid ? '' : 'invalid'}
+			type="text"
+			id="latlon"
+			bind:value={latlon}
+		/>
+		<button type="submit">Go</button>
+		{status}
+	</form>
+</header>
+
+<div id="map" />
 
 <style>
+	header {
+		height: 1.5em;
+	}
+	#map {
+		width: 100vw;
+		height: calc(100vh - 2em);
+		padding: 0;
+	}
+	form {
+		position: absolute;
+		z-index: 2;
+		top: 0;
+	}
 	input.invalid {
 		background-color: lightpink;
 	}
