@@ -47,7 +47,7 @@
 			const leaflet = await import('leaflet');
 			let map = leaflet
 				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center' })
-				.setView([lat, lon], 14);
+				.setView([lat, lon], 7);
 
 			leaflet
 				.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
