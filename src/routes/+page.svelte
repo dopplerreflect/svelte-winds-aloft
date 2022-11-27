@@ -2,8 +2,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	let lat = 33.9769;
-	let lon = -85.1703;
+	let lat = 0;
+	let lon = 0;
 	let alt = 0;
 	let status = '';
 	$: latlon = [lat, lon, alt].join(',');
@@ -40,12 +40,15 @@
 
 	onMount(async () => {
 		if (browser) {
-			navigator.geolocation.getCurrentPosition((p) => {
+			await navigator.geolocation.getCurrentPosition((p) => {
 				(lat = p.coords.latitude), (lon = p.coords.longitude);
 			});
 
 			const leaflet = await import('leaflet');
-			let map = leaflet.map('map').setView([lat, lon], 14);
+			let map = leaflet
+				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center' })
+				.setView([lat, lon], 14);
+
 			leaflet
 				.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 					maxZoom: 19,
