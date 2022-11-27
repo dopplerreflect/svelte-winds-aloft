@@ -42,20 +42,20 @@
 		if (browser) {
 			navigator.geolocation.getCurrentPosition((p) => {
 				(lat = p.coords.latitude), (lon = p.coords.longitude);
-				console.log(p.coords);
 			});
 
-			const L = await import('leaflet');
-			let map = L.map('map').setView([lat, lon], 14);
-			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				maxZoom: 19,
-				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-			}).addTo(map);
+			const leaflet = await import('leaflet');
+			let map = leaflet.map('map').setView([lat, lon], 14);
+			leaflet
+				.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					maxZoom: 19,
+					attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+				})
+				.addTo(map);
 
-			let marker = L.marker([lat, lon], { draggable: true }).addTo(map);
+			let marker = leaflet.marker([lat, lon], { draggable: true }).addTo(map);
 
 			async function resetLatLon() {
-				console.log('resetLatLon');
 				let latlng = marker.getLatLng();
 				lat = Number(latlng.lat.toFixed(4));
 				lon = Number(latlng.lng.toFixed(4));
