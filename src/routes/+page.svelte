@@ -5,6 +5,7 @@
 	let lat = 33.9769;
 	let lon = -85.1703;
 	let alt = 0;
+	let status = '';
 	$: latlon = [lat, lon, alt].join(',');
 	$: valid = latlon.match(/^[\d]+\.[\d]+[, ]*[-]?[\d]+\.[\d]+[, \d]*/);
 	$: coords = latlon
@@ -14,11 +15,13 @@
 
 	const handleSubmit = () => {
 		if (valid) {
+			status = 'Fetching winds aloft data';
 			goto(`/${coords.join()}`);
 		}
 	};
 
 	const setElevation = async () => {
+		status = 'Getting elevation';
 		const queryStr = Object.entries({
 			x: lon,
 			y: lat,
@@ -31,6 +34,7 @@
 		const url = `https://nationalmap.gov/epqs/pqs.php?${queryStr}`;
 		const response = await fetch(url);
 		const json = await response.json();
+		status = '';
 		return json.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation;
 	};
 
@@ -72,6 +76,7 @@
 			bind:value={latlon}
 		/>
 		<button type="submit">Go</button>
+		{status}
 	</form>
 </header>
 
