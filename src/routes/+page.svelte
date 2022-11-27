@@ -2,8 +2,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	let lat = 0;
-	let lon = 0;
+	let lat = 33.9769;
+	let lon = -85.1703;
 	let alt = 0;
 	let status = '';
 	$: latlon = [lat, lon, alt].join(',');
