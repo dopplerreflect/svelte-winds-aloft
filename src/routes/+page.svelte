@@ -62,7 +62,10 @@
 				alt = await setElevation();
 			}
 
-			marker.on('dragend', resetLatLon);
+			map.on('move', (e) => {
+				marker.setLatLng(map.getCenter());
+			});
+			map.on('moveend', resetLatLon);
 
 			alt = await setElevation();
 		}
