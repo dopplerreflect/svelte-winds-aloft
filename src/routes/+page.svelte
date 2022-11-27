@@ -40,19 +40,31 @@
 
 	onMount(async () => {
 		if (browser) {
+			navigator.geolocation.getCurrentPosition((p) => {
+				(lat = p.coords.latitude), (lon = p.coords.longitude);
+				console.log(p.coords);
+			});
+
 			const L = await import('leaflet');
 			let map = L.map('map').setView([lat, lon], 14);
 			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			}).addTo(map);
-			let marker = L.marker([lat, lon]).addTo(map);
-			alt = await setElevation();
-			map.on('click', async (e) => {
-				lat = Number(e.latlng.lat.toFixed(4));
-				lon = Number(e.latlng.lng.toFixed(4));
+
+			let marker = L.marker([lat, lon], { draggable: true }).addTo(map);
+
+			async function resetLatLon() {
+				console.log('resetLatLon');
+				let latlng = marker.getLatLng();
+				lat = Number(latlng.lat.toFixed(4));
+				lon = Number(latlng.lng.toFixed(4));
 				alt = await setElevation();
-			});
+			}
+
+			marker.on('dragend', resetLatLon);
+
+			alt = await setElevation();
 		}
 	});
 </script>
