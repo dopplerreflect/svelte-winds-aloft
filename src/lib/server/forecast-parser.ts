@@ -7,6 +7,7 @@ export const parseForecastText = (text: string) => {
 
 		let info = parseInfo(_info);
 		let [, cape, , cin] = _capecin.split(/[\s]+/);
+		let [, latlon] = _sid_other.split(/[\s]+/);
 		let [type, pressure, height, temp, dewpt, direction, speed] = _surface
 			.split(/[\s]+/)
 			.map((v) => Number(v));
@@ -25,6 +26,7 @@ export const parseForecastText = (text: string) => {
 			header,
 			_info,
 			info,
+			latlon,
 			_capecin,
 			cape,
 			cin,

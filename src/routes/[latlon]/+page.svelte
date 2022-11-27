@@ -38,48 +38,55 @@
 	<ToggleSwitch bind:checked={useFarenheit} label={{ on: '°F', off: '°C' }} />
 	<ToggleSwitch bind:checked={filter5km} label={{ on: 'Max 5km', off: 'Max ∞' }} />
 </header>
-<div>
-	Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}
-</div>
-<div class="grid-container outer">
-	{#each data.forecasts as forecast, fi}
-		<div class="forecast">
-			<div class="datetime">
-				{toLocalTime(
-					forecast.info.year,
-					forecast.info.month,
-					forecast.info.day,
-					forecast.info.hour
-				)}
-				({forecast.info.hour} UTC)
-			</div>
-			<div class="capecin">CAPE: {forecast.cape} CIN: {forecast.cin}</div>
-			{#each forecast.soundings.filter((s) => (filter5km ? s.height < 5000 : s)) as sounding, si}
-				<div class="grid-container inner">
-					<div class="height">
-						{useFeet ? metersToFeet(sounding.height - heightAGL) : sounding.height - heightAGL}
-						{heightLabel}
-					</div>
-					<div class="speed">
-						{useMph ? knotsToMph(sounding.speed) : sounding.speed}
-						{speedLabel}
-					</div>
-					<div>
-						<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
-					</div>
-					<div class="direction">
-						{sounding.direction}°
-					</div>
-					<div class="temperature {highlightInversion(fi, si)}">
-						{Math.round(
-							Number(useFarenheit ? celsiusToFarenheit(sounding.temp) : sounding.temp)
-						)}{temperatureLabel}
-					</div>
+
+<main>
+	<div>
+		Location: {data.forecasts[0].latlon}
+		Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}
+	</div>
+	<div class="grid-container outer">
+		{#each data.forecasts as forecast, fi}
+			<div class="forecast">
+				<div class="datetime">
+					{toLocalTime(
+						forecast.info.year,
+						forecast.info.month,
+						forecast.info.day,
+						forecast.info.hour
+					)}
+					({forecast.info.hour} UTC)
 				</div>
-			{/each}
-		</div>
-	{/each}
-</div>
+				<div class="capecin">CAPE: {forecast.cape} CIN: {forecast.cin}</div>
+				<div class="grid-container inner">
+					<div>{heightLabel}</div>
+					<div>{speedLabel}</div>
+					<div />
+					<div />
+					<div />
+					{#each forecast.soundings.filter( (s) => (filter5km ? s.height < 5000 : s) ) as sounding, si}
+						<div class="height">
+							{useFeet ? metersToFeet(sounding.height - heightAGL) : sounding.height - heightAGL}
+						</div>
+						<div class="speed">
+							{useMph ? knotsToMph(sounding.speed) : sounding.speed}
+						</div>
+						<div>
+							<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
+						</div>
+						<div class="direction">
+							{sounding.direction}°
+						</div>
+						<div class="temperature {highlightInversion(fi, si)}">
+							{Math.round(
+								Number(useFarenheit ? celsiusToFarenheit(sounding.temp) : sounding.temp)
+							)}{temperatureLabel}
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/each}
+	</div>
+</main>
 
 <!-- <div>
 	<code>{JSON.stringify(data.forecasts, null, 2)}</code>
@@ -89,26 +96,20 @@
 		font-family: 'Courier New', Courier, monospace;
 	}
 	.grid-container.outer {
-		width: 100vw;
 		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 	.grid-container.inner {
 		display: grid;
-		grid-template-columns: 1fr 5em 2em 3em 3em;
+		grid-template-columns: 5em 3em 2em 4em 4em;
 		border-bottom: 1px solid lightgray;
 	}
 	.grid-container.inner div {
-		margin-right: 0.5em;
-		border-right: 1px solid lightgray;
-	}
-	.grid-container.inner:hover {
-		background-color: lightgray;
+		text-align: center;
 	}
 	.forecast {
 		border-left: 2px solid black;
-	}
-	.forecast:last-child {
-		border-right: 2px solid black;
 	}
 	.direction {
 		text-align: right;
@@ -125,7 +126,7 @@
 	.temperature.highlight {
 		background-color: lightgoldenrodyellow;
 	}
-	code {
+	/* code {
 		white-space: pre;
-	}
+	} */
 </style>
