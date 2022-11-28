@@ -73,11 +73,11 @@
 	}
 
 	input:checked + .slider {
-		background-color: blue;
+		background-color: hsl(120, 100%, 25%);
 	}
 
 	input:focus + .slider {
-		box-shadow: 0 0 1px blue;
+		box-shadow: 0 0 3px hsl(120, 100%, 50%);
 	}
 
 	input:checked + .slider:before {
