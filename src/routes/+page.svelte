@@ -87,32 +87,34 @@
 <header>
 	<form on:submit|preventDefault={handleSubmit}>
 		<input
+			type="hidden"
 			autocomplete="off"
 			class={valid ? '' : 'invalid'}
-			type="text"
 			id="latlon"
 			bind:value={latlon}
 		/>
 		<button type="submit">Go</button>
 		{status}
 	</form>
+	<div>Latitude: {lat} Longitude: {lon} Elevation: {alt}m</div>
 </header>
 
 <div id="map" />
 
 <style>
 	header {
-		height: 1.5em;
+		font-family: 'Courier New', Courier, monospace;
+		display: flex;
+		gap: 2em;
+		/* justify-content: center; */
+		height: 2em;
+	}
+	button {
 	}
 	#map {
 		width: 100vw;
-		height: calc(100vh - 2em);
+		height: calc(100vh - 3em);
 		padding: 0;
-	}
-	form {
-		position: absolute;
-		z-index: 2;
-		top: 0;
 	}
 	input.invalid {
 		background-color: lightpink;
