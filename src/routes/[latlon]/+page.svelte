@@ -47,7 +47,7 @@
 	<div class="grid-container outer">
 		{#each data.forecasts as forecast, fi}
 			<div class="forecast">
-				<div class="datetime">
+				<div class="header datetime">
 					{toLocalTime(
 						forecast.info.year,
 						forecast.info.month,
@@ -56,7 +56,7 @@
 					)}
 					({forecast.info.hour} UTC)
 				</div>
-				<div class="capecin">CAPE: {forecast.cape} CIN: {forecast.cin}</div>
+				<div class="header capecin">CAPE: {forecast.cape} CIN: {forecast.cin}</div>
 				<div class="grid-container inner">
 					<div>{heightLabel}</div>
 					<div>{speedLabel}</div>
@@ -94,6 +94,7 @@
 <style>
 	.grid-container {
 		font-family: 'Courier New', Courier, monospace;
+		font-size: 1em;
 	}
 	.grid-container.outer {
 		display: flex;
@@ -103,22 +104,26 @@
 	.grid-container.inner {
 		display: grid;
 		grid-template-columns: 5em 3em 2em 4em 4em;
-		border-bottom: 1px solid lightgray;
 	}
 	.grid-container.inner div {
 		text-align: center;
 	}
 	.forecast {
-		border-left: 2px solid black;
+		width: 20rem;
+		border: 1px solid black;
+	}
+	.forecast .header {
+		padding: 0.25em;
+		border-bottom: 1px solid black;
 	}
 	.direction {
 		text-align: right;
 	}
 	.datetime {
-		background-color: lightblue;
+		/* background-color: lightblue; */
 	}
 	.capecin {
-		background-color: lightgreen;
+		/* background-color: lightgreen; */
 	}
 	.arrow {
 		display: inline-block;

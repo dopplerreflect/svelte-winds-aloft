@@ -1,4 +1,4 @@
-export const N_HRS = 4.0;
+export const N_HRS = 12.0;
 
 export const MONTHS = new Map([
 	['Jan', 1],
