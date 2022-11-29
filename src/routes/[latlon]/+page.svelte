@@ -98,6 +98,7 @@
 	}
 	main {
 		font-family: 'Courier New', Courier, monospace;
+		font-weight: bold;
 		margin: 1em;
 	}
 	main > .header {

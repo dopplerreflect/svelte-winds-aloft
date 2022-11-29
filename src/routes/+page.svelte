@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	let submitButton: HTMLButtonElement;
 	let lat = 33.9769;
 	let lon = -85.1703;
 	let alt = 0;
@@ -46,8 +47,10 @@
 
 			const leaflet = await import('leaflet');
 			let map = leaflet
-				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center' })
+				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center', zoomControl: false })
 				.setView([lat, lon], 7);
+
+			leaflet.control.zoom({ position: 'bottomright' }).addTo(map);
 
 			leaflet
 				.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -70,6 +73,11 @@
 			});
 			map.on('moveend', resetLatLon);
 
+			marker.on('click', () => {
+				console.log('clicked marker');
+				submitButton.click();
+			});
+
 			alt = await setElevation();
 		}
 	});
@@ -84,36 +92,66 @@
 	/>
 </svelte:head>
 
+<form on:submit|preventDefault={handleSubmit}>
+	<input
+		type="hidden"
+		autocomplete="off"
+		class={valid ? '' : 'invalid'}
+		id="latlon"
+		bind:value={latlon}
+	/>
+	<button bind:this={submitButton} type="submit">➤</button>
+</form>
+
 <header>
-	<form on:submit|preventDefault={handleSubmit}>
-		<input
-			type="hidden"
-			autocomplete="off"
-			class={valid ? '' : 'invalid'}
-			id="latlon"
-			bind:value={latlon}
-		/>
-		<button type="submit">Go</button>
-		{status}
-	</form>
-	<div>Latitude: {lat} Longitude: {lon} Elevation: {alt}m</div>
+	<div>Latitude:</div>
+	<div>{lat}</div>
+	<div>Longitude:</div>
+	<div>{lon}</div>
+	<div>Elevation:</div>
+	<div>{alt}</div>
 </header>
 
 <div id="map" />
 
 <style>
 	header {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 2;
 		font-family: 'Courier New', Courier, monospace;
-		display: flex;
-		gap: 2em;
-		/* justify-content: center; */
-		height: 2em;
+		font-weight: bold;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		background-color: hsla(220, 50%, 50%, 0.33);
 	}
-	button {
+	header > div:nth-child(even) {
+		text-align: right;
+	}
+	form {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 2;
+	}
+	form button {
+		font-size: 3em;
+		line-height: 1em;
+		background-color: hsla(120, 50%, 50%, 0.33);
+		border-radius: 1.5em;
+	}
+	form button:hover {
+		background-color: hsla(120, 50%, 50%, 0.75);
+		cursor: pointer;
 	}
 	#map {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 0;
 		width: 100vw;
-		height: calc(100vh - 3em);
+		height: 100vh;
 		padding: 0;
 	}
 	input.invalid {
