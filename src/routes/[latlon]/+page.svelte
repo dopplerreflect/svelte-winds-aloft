@@ -2,9 +2,11 @@
 	import type { PageData } from './$types';
 	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
 	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
+	const CloseButton = new URL('$lib/assets/close-botton.svg', import.meta.url).href;
 
 	export let data: PageData;
 
+	let navVisible = true;
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
@@ -27,7 +29,16 @@
 	}
 </script>
 
-<header>
+<nav class={navVisible ? '' : 'hidden'}>
+	<div class="header">
+		<button
+			on:click={() => {
+				navVisible = false;
+			}}
+		>
+			<img src="/close-button.png" alt="close" />
+		</button>
+	</div>
 	<ToggleSwitch bind:checked={useFeet} label={{ on: 'feet', off: 'meters' }} />
 	<ToggleSwitch
 		disabled={Number(data.alt) === 0}
@@ -37,7 +48,7 @@
 	<ToggleSwitch bind:checked={useMph} label={{ on: 'mph', off: 'kts' }} />
 	<ToggleSwitch bind:checked={useFarenheit} label={{ on: '°F', off: '°C' }} />
 	<ToggleSwitch bind:checked={filter5km} label={{ on: 'Max 5km', off: 'Max ∞' }} />
-</header>
+</nav>
 
 <main>
 	<div class="header">
@@ -95,6 +106,33 @@
 		display: flex;
 		justify-content: center;
 		gap: 0.5em;
+	}
+	nav {
+		display: block;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		width: 100vw;
+		height: 100vh;
+		color: white;
+		background-color: hsla(210, 100%, 15%, 0.85);
+	}
+	nav .header {
+		display: flex;
+		height: 3em;
+		justify-content: right;
+	}
+	nav .header button {
+		background-color: transparent;
+		border: 0;
+	}
+	nav .header img {
+		height: 3em;
+		margin-right: 2em;
+	}
+	nav.hidden {
+		display: none;
 	}
 	main {
 		font-family: 'Courier New', Courier, monospace;

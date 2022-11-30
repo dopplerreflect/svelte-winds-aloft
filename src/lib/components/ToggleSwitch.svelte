@@ -20,17 +20,19 @@
 
 <style>
 	.switch-with-label {
-		display: inline-block;
-		text-align: center;
-		width: 5em;
-		border: 1px solid black;
+		position: relative;
+		left: calc(25% - 0.5em);
+		width: 50%;
+		display: grid;
+		grid-template-columns: 1fr 3em;
+		border: 1px solid white;
 		border-radius: 0.5em;
-		padding-bottom: 0.5em;
+		margin: 0.5em 0 0.5em 0;
+		padding: 0.5em;
 	}
 	.label {
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
 			'Open Sans', 'Helvetica Neue', sans-serif;
-		text-align: center;
 	}
 	/* The switch - the box around the slider */
 	.switch {
@@ -67,17 +69,13 @@
 		width: 1.25em;
 		left: 0.15em;
 		bottom: 0.15em;
-		background-color: white;
+		background-color: hsl(210, 100%, 25%);
 		-webkit-transition: 0.25s;
 		transition: 0.25s;
 	}
 
 	input:checked + .slider {
-		background-color: hsl(120, 100%, 25%);
-	}
-
-	input:focus + .slider {
-		box-shadow: 0 0 3px hsl(120, 100%, 50%);
+		background-color: hsl(210, 100%, 75%);
 	}
 
 	input:checked + .slider:before {
