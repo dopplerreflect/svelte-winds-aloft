@@ -2,6 +2,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { setElevation } from '$lib/setElevation';
+
 	let submitButton: HTMLButtonElement;
 	let lat = 33.9769;
 	let lon = -85.1703;
@@ -19,24 +21,6 @@
 			status = 'Fetching winds aloft data';
 			goto(`/${coords.join()}`);
 		}
-	};
-
-	const setElevation = async () => {
-		status = 'Getting elevation';
-		const queryStr = Object.entries({
-			x: lon,
-			y: lat,
-			units: 'Meters',
-			output: 'json'
-		})
-			.map((e) => e.join('='))
-			.join('&');
-
-		const url = `https://nationalmap.gov/epqs/pqs.php?${queryStr}`;
-		const response = await fetch(url);
-		const json = await response.json();
-		status = '';
-		return json.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation;
 	};
 
 	onMount(async () => {
@@ -65,7 +49,9 @@
 				let latlng = marker.getLatLng();
 				lat = Number(latlng.lat.toFixed(4));
 				lon = Number(latlng.lng.toFixed(4));
-				alt = await setElevation();
+				status = 'Getting Elevation';
+				alt = await setElevation(lat, lon);
+				status = '';
 			}
 
 			map.on('move', (e) => {
@@ -78,7 +64,11 @@
 				submitButton.click();
 			});
 
-			alt = await setElevation();
+			if (!alt) {
+				status = 'Getting Elevation';
+				alt = await setElevation(lat, lon);
+				status = '';
+			}
 		}
 	});
 </script>
@@ -101,6 +91,7 @@
 		bind:value={latlon}
 	/>
 	<button bind:this={submitButton} type="submit">➤</button>
+	{status}
 </form>
 
 <header>

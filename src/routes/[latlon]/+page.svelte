@@ -1,14 +1,26 @@
 <script type="ts">
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
 	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
+	import { setElevation } from '$lib/setElevation';
 
 	export let data: PageData;
+
+	onMount(async () => {
+		if (data.alt === 0) {
+			console.log('data.alt was empty');
+			let [lat, lon] = data.forecasts[0].latlon.split(',').map((n) => Number(n));
+			data.alt = await setElevation(lat, lon);
+			data = data;
+			console.log('alt was empty', data.alt);
+		}
+	});
 
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
-	let useAGL = Number(data.alt) > 0 ? true : false;
+	$: useAGL = Number(data.alt) > 0 ? true : false;
 	let filter5km = true;
 
 	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m ${useAGL ? 'agl' : 'msl'}`;
@@ -87,9 +99,10 @@
 	</div>
 </main>
 
-<!-- <div>
-	<code>{JSON.stringify(data.forecasts, null, 2)}</code>
-</div> -->
+<div>
+	<code>{JSON.stringify(data, null, 2)}</code>
+</div>
+
 <style>
 	header {
 		display: flex;
@@ -138,7 +151,7 @@
 	.temperature.highlight {
 		background-color: lightgoldenrodyellow;
 	}
-	/* code {
+	code {
 		white-space: pre;
-	} */
+	}
 </style>
