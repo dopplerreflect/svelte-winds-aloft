@@ -9,18 +9,16 @@
 
 	onMount(async () => {
 		if (data.alt === 0) {
-			console.log('data.alt was empty');
 			let [lat, lon] = data.forecasts[0].latlon.split(',').map((n) => Number(n));
 			data.alt = await setElevation(lat, lon);
 			data = data;
-			console.log('alt was empty', data.alt);
 		}
 	});
 
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
-	$: useAGL = Number(data.alt) > 0 ? true : false;
+	let useAGL = true;
 	let filter5km = true;
 
 	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m ${useAGL ? 'agl' : 'msl'}`;
@@ -54,7 +52,7 @@
 <main>
 	<div class="header">
 		Location: {data.forecasts[0].latlon}
-		Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}
+		Elevation: {useFeet ? metersToFeet(data.alt) : data.alt}{useFeet ? 'ft' : 'm'}
 	</div>
 	<div class="grid-container outer">
 		{#each data.forecasts as forecast, fi}

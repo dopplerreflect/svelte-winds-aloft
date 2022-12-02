@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import { setElevation } from '$lib/setElevation';
 
 	let submitButton: HTMLButtonElement;
 	let lat = 33.9769;
@@ -25,10 +24,6 @@
 
 	onMount(async () => {
 		if (browser) {
-			await navigator.geolocation.getCurrentPosition((p) => {
-				(lat = p.coords.latitude), (lon = p.coords.longitude);
-			});
-
 			const leaflet = await import('leaflet');
 			let map = leaflet
 				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center', zoomControl: false })
@@ -45,30 +40,28 @@
 
 			let marker = leaflet.marker([lat, lon], { draggable: true }).addTo(map);
 
+			await navigator.geolocation.getCurrentPosition((p) => {
+				lat = p.coords.latitude;
+				lon = p.coords.longitude;
+				map.setView([lat, lon]);
+				marker.setLatLng({ lat, lng: lon });
+			});
+
 			async function resetLatLon() {
 				let latlng = marker.getLatLng();
 				lat = Number(latlng.lat.toFixed(4));
 				lon = Number(latlng.lng.toFixed(4));
-				status = 'Getting Elevation';
-				alt = await setElevation(lat, lon);
-				status = '';
 			}
 
 			map.on('move', (e) => {
 				marker.setLatLng(map.getCenter());
 			});
+
 			map.on('moveend', resetLatLon);
 
 			marker.on('click', () => {
-				console.log('clicked marker');
 				submitButton.click();
 			});
-
-			if (!alt) {
-				status = 'Getting Elevation';
-				alt = await setElevation(lat, lon);
-				status = '';
-			}
 		}
 	});
 </script>
@@ -99,8 +92,6 @@
 	<div>{lat}</div>
 	<div>Longitude:</div>
 	<div>{lon}</div>
-	<div>Elevation:</div>
-	<div>{alt}</div>
 </header>
 
 <div id="map" />
