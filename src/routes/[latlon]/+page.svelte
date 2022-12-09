@@ -5,7 +5,6 @@
 	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
 	import { setElevation } from '$lib/setElevation';
 	export let data: PageData;
-	const CloseButton = new URL('$lib/assets/close-botton.svg', import.meta.url).href;
 
 	onMount(async () => {
 		if (data.alt === 0) {
@@ -15,7 +14,7 @@
 		}
 	});
 
-	let navVisible = true;
+	let navVisible = false;
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
@@ -38,16 +37,18 @@
 	}
 </script>
 
+<header>
+	<p>header</p>
+	<button
+		on:click={() => {
+			navVisible = !navVisible;
+		}}
+	>
+		<img src={navVisible ? '/close-button.svg' : `/settings-icon.svg`} alt="close" />
+	</button>
+</header>
+
 <nav class={navVisible ? '' : 'hidden'}>
-	<div class="header">
-		<button
-			on:click={() => {
-				navVisible = false;
-			}}
-		>
-			<img src="/close-button.png" alt="close" />
-		</button>
-	</div>
 	<ToggleSwitch bind:checked={useFeet} label={{ on: 'feet', off: 'meters' }} />
 	<ToggleSwitch
 		disabled={Number(data.alt) === 0}
@@ -107,39 +108,42 @@
 	</div>
 </main>
 
-<div>
+<!-- <div>
 	<code>{JSON.stringify(data, null, 2)}</code>
-</div>
-
+</div> -->
 <style>
+	:root {
+		--header-height: 3em;
+	}
+	:root::-webkit-scrollbar {
+		display: none;
+	}
 	header {
+		position: sticky;
+		top: 0;
+		width: 100vw;
+		color: white;
+		background-color: hsla(210, 100%, 15%, 0.85);
 		display: flex;
-		justify-content: center;
+		justify-content: right;
 		gap: 0.5em;
+	}
+	header button {
+		background-color: transparent;
+		border: 0;
+	}
+	header img {
+		height: var(--header-height);
 	}
 	nav {
 		display: block;
 		position: fixed;
-		top: 0;
+		top: var(--header-height);
 		left: 0;
 		z-index: 1;
 		width: 100vw;
-		height: 100vh;
 		color: white;
 		background-color: hsla(210, 100%, 15%, 0.85);
-	}
-	nav .header {
-		display: flex;
-		height: 3em;
-		justify-content: right;
-	}
-	nav .header button {
-		background-color: transparent;
-		border: 0;
-	}
-	nav .header img {
-		height: 3em;
-		margin-right: 2em;
 	}
 	nav.hidden {
 		display: none;
@@ -147,7 +151,6 @@
 	main {
 		font-family: 'Courier New', Courier, monospace;
 		font-weight: bold;
-		margin: 1em;
 	}
 	main > .header {
 		text-align: center;
