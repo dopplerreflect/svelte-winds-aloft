@@ -1,16 +1,25 @@
 <script type="ts">
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
 	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
+	import { setElevation } from '$lib/setElevation';
+	export let data: PageData;
 	const CloseButton = new URL('$lib/assets/close-botton.svg', import.meta.url).href;
 
-	export let data: PageData;
+	onMount(async () => {
+		if (data.alt === 0) {
+			let [lat, lon] = data.forecasts[0].latlon.split(',').map((n) => Number(n));
+			data.alt = await setElevation(lat, lon);
+			data = data;
+		}
+	});
 
 	let navVisible = true;
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
-	let useAGL = Number(data.alt) > 0 ? true : false;
+	let useAGL = true;
 	let filter5km = true;
 
 	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m ${useAGL ? 'agl' : 'msl'}`;
@@ -53,7 +62,7 @@
 <main>
 	<div class="header">
 		Location: {data.forecasts[0].latlon}
-		Elevation: {useFeet ? metersToFeet(heightAGL) : heightAGL}{useFeet ? 'ft' : 'm'}
+		Elevation: {useFeet ? metersToFeet(data.alt) : data.alt}{useFeet ? 'ft' : 'm'}
 	</div>
 	<div class="grid-container outer">
 		{#each data.forecasts as forecast, fi}
@@ -98,9 +107,10 @@
 	</div>
 </main>
 
-<!-- <div>
-	<code>{JSON.stringify(data.forecasts, null, 2)}</code>
-</div> -->
+<div>
+	<code>{JSON.stringify(data, null, 2)}</code>
+</div>
+
 <style>
 	header {
 		display: flex;
@@ -176,7 +186,7 @@
 	.temperature.highlight {
 		background-color: lightgoldenrodyellow;
 	}
-	/* code {
+	code {
 		white-space: pre;
-	} */
+	}
 </style>

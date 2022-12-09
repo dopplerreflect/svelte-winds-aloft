@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+
 	let submitButton: HTMLButtonElement;
 	let lat = 33.9769;
 	let lon = -85.1703;
@@ -21,30 +22,8 @@
 		}
 	};
 
-	const setElevation = async () => {
-		status = 'Getting elevation';
-		const queryStr = Object.entries({
-			x: lon,
-			y: lat,
-			units: 'Meters',
-			output: 'json'
-		})
-			.map((e) => e.join('='))
-			.join('&');
-
-		const url = `https://nationalmap.gov/epqs/pqs.php?${queryStr}`;
-		const response = await fetch(url);
-		const json = await response.json();
-		status = '';
-		return json.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation;
-	};
-
 	onMount(async () => {
 		if (browser) {
-			await navigator.geolocation.getCurrentPosition((p) => {
-				(lat = p.coords.latitude), (lon = p.coords.longitude);
-			});
-
 			const leaflet = await import('leaflet');
 			let map = leaflet
 				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center', zoomControl: false })
@@ -61,24 +40,28 @@
 
 			let marker = leaflet.marker([lat, lon], { draggable: true }).addTo(map);
 
+			await navigator.geolocation.getCurrentPosition((p) => {
+				lat = p.coords.latitude;
+				lon = p.coords.longitude;
+				map.setView([lat, lon]);
+				marker.setLatLng({ lat, lng: lon });
+			});
+
 			async function resetLatLon() {
 				let latlng = marker.getLatLng();
 				lat = Number(latlng.lat.toFixed(4));
 				lon = Number(latlng.lng.toFixed(4));
-				alt = await setElevation();
 			}
 
 			map.on('move', (e) => {
 				marker.setLatLng(map.getCenter());
 			});
+
 			map.on('moveend', resetLatLon);
 
 			marker.on('click', () => {
-				console.log('clicked marker');
 				submitButton.click();
 			});
-
-			alt = await setElevation();
 		}
 	});
 </script>
@@ -101,6 +84,7 @@
 		bind:value={latlon}
 	/>
 	<button bind:this={submitButton} type="submit">➤</button>
+	{status}
 </form>
 
 <header>
@@ -108,8 +92,6 @@
 	<div>{lat}</div>
 	<div>Longitude:</div>
 	<div>{lon}</div>
-	<div>Elevation:</div>
-	<div>{alt}</div>
 </header>
 
 <div id="map" />
