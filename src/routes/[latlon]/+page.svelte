@@ -38,13 +38,12 @@
 </script>
 
 <header>
-	<p>header</p>
 	<button
 		on:click={() => {
 			navVisible = !navVisible;
 		}}
 	>
-		<img src={navVisible ? '/close-button.svg' : `/settings-icon.svg`} alt="close" />
+		<img src={navVisible ? '/close-icon.svg' : `/settings-icon.svg`} alt="close" />
 	</button>
 </header>
 
@@ -121,6 +120,7 @@
 	header {
 		position: sticky;
 		top: 0;
+		height: var(--header-height);
 		width: 100vw;
 		color: white;
 		background-color: hsla(210, 100%, 15%, 0.85);
