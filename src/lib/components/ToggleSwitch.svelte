@@ -21,8 +21,8 @@
 <style>
 	.switch-with-label {
 		position: relative;
-		left: calc(25% - 0.5em);
-		width: 50%;
+		left: calc(15% - 0.5em);
+		width: 70%;
 		display: grid;
 		grid-template-columns: 1fr 3em;
 		border: 1px solid white;

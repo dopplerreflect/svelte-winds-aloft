@@ -1,16 +1,20 @@
 <script type="ts">
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
 	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
 	import { setElevation } from '$lib/setElevation';
 	export let data: PageData;
 
+	let status = '';
 	onMount(async () => {
 		if (data.alt === 0) {
 			let [lat, lon] = data.forecasts[0].latlon.split(',').map((n) => Number(n));
+			status = 'Fetching elevation';
 			data.alt = await setElevation(lat, lon);
 			data = data;
+			status = '';
 		}
 	});
 
@@ -38,6 +42,14 @@
 </script>
 
 <header>
+	<button
+		on:click={() => {
+			goto('/');
+		}}
+	>
+		<img src="/arrow-icon.svg" alt="back" style="transform:rotate(180deg)" />
+	</button>
+	<div class="centered">{status}</div>
 	<button
 		on:click={() => {
 			navVisible = !navVisible;
@@ -117,15 +129,20 @@
 	:root::-webkit-scrollbar {
 		display: none;
 	}
+	.centered {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	header {
+		display: grid;
+		grid-template-columns: var(--header-height) 1fr var(--header-height);
 		position: sticky;
 		top: 0;
 		height: var(--header-height);
 		width: 100vw;
 		color: white;
 		background-color: hsla(210, 100%, 15%, 0.85);
-		display: flex;
-		justify-content: right;
 		gap: 0.5em;
 	}
 	header button {
@@ -189,7 +206,7 @@
 	.temperature.highlight {
 		background-color: lightgoldenrodyellow;
 	}
-	code {
+	/* code {
 		white-space: pre;
-	}
+	} */
 </style>

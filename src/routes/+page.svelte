@@ -75,57 +75,44 @@
 	/>
 </svelte:head>
 
-<form on:submit|preventDefault={handleSubmit}>
-	<input
-		type="hidden"
-		autocomplete="off"
-		class={valid ? '' : 'invalid'}
-		id="latlon"
-		bind:value={latlon}
-	/>
-	<button bind:this={submitButton} type="submit">➤</button>
-	{status}
-</form>
-
 <header>
-	<div>Latitude:</div>
-	<div>{lat}</div>
-	<div>Longitude:</div>
-	<div>{lon}</div>
+	<div />
+	<div class="centered">{status ? status : latlon}</div>
+	<div>
+		<!-- <a href={`/${latlon}`}><img class="icon" src="/arrow-icon.svg" alt="go" /></a> -->
+		<button on:click={handleSubmit}>
+			<img class="icon" src="/arrow-icon.svg" alt="go" />
+		</button>
+	</div>
 </header>
 
 <div id="map" />
 
 <style>
+	:root {
+		--header-height: 3em;
+	}
+	.centered {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	header {
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 2;
-		font-family: 'Courier New', Courier, monospace;
-		font-weight: bold;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		background-color: hsla(220, 50%, 50%, 0.33);
-	}
-	header > div:nth-child(even) {
-		text-align: right;
-	}
-	form {
-		position: absolute;
+		grid-template-columns: var(--header-height) 1fr var(--header-height);
+		position: sticky;
 		top: 0;
-		right: 0;
+		height: var(--header-height);
 		z-index: 2;
+		color: white;
+		background-color: hsla(210, 100%, 15%, 0.85);
 	}
-	form button {
-		font-size: 3em;
-		line-height: 1em;
-		background-color: hsla(120, 50%, 50%, 0.33);
-		border-radius: 1.5em;
+	header button {
+		background-color: transparent;
+		border: 0;
 	}
-	form button:hover {
-		background-color: hsla(120, 50%, 50%, 0.75);
-		cursor: pointer;
+	.icon {
+		height: var(--header-height);
 	}
 	#map {
 		position: absolute;
@@ -135,8 +122,5 @@
 		width: 100vw;
 		height: 100vh;
 		padding: 0;
-	}
-	input.invalid {
-		background-color: lightpink;
 	}
 </style>
