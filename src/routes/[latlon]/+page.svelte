@@ -1,10 +1,15 @@
 <script type="ts">
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+
 	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
-	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
 	import { setElevation } from '$lib/setElevation';
+	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
+	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
+	import SettingsIcon from '$lib/components/SettingsIcon.svelte';
+	import CloseIcon from '$lib/components/CloseIcon.svelte';
+
+	import type { PageData } from './$types';
 	export let data: PageData;
 
 	let status = '';
@@ -47,7 +52,7 @@
 			goto('/');
 		}}
 	>
-		<img src="/arrow-icon.svg" alt="back" style="transform:rotate(180deg)" />
+		<ArrowIcon style="transform: rotate(180deg)" />
 	</button>
 	<div class="centered">{status}</div>
 	<button
@@ -55,7 +60,11 @@
 			navVisible = !navVisible;
 		}}
 	>
-		<img src={navVisible ? '/close-icon.svg' : `/settings-icon.svg`} alt="close" />
+		{#if navVisible}
+			<CloseIcon />
+		{:else}
+			<SettingsIcon />
+		{/if}
 	</button>
 </header>
 

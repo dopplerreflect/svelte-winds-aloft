@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
 
 	let submitButton: HTMLButtonElement;
 	let lat = 33.9769;
@@ -79,7 +80,8 @@
 	<div class="centered">{status ? status : latlon}</div>
 	<div>
 		<button on:click={handleSubmit}>
-			<img class="icon" src="/arrow-icon.svg" alt="go" />
+			<!-- <img class="icon" src="/arrow-icon.svg" alt="go" /> -->
+			<ArrowIcon />
 		</button>
 	</div>
 </header>

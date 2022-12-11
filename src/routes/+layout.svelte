@@ -12,9 +12,20 @@
 	}
 	:root {
 		--header-height: 3em;
+		--svg-stroke-color: hsl(210, 100%, 75%);
+		--svg-hover-stroke-color: hsl(210, 100%, 100%);
 	}
 	:root::-webkit-scrollbar {
 		display: none;
+	}
+	svg {
+		width: var(--header-height);
+		height: var(--header-height);
+		stroke: var(--svg-stroke-color);
+	}
+	svg:hover {
+		stroke: var(--svg-hover-stroke-color);
+		cursor: pointer;
 	}
 	.centered {
 		display: flex;
@@ -34,8 +45,5 @@
 	header button {
 		background-color: transparent;
 		border: 0;
-	}
-	.icon {
-		height: var(--header-height);
 	}
 </style>
