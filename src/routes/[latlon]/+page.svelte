@@ -134,6 +134,11 @@
 <style>
 	:root {
 		--header-height: 3em;
+		--border: 1px solid hsl(210, 50%, 50%);
+	}
+	main {
+		background-color: hsl(210, 50%, 10%);
+		color: white;
 	}
 	nav {
 		display: block;
@@ -171,14 +176,14 @@
 	}
 	.forecast {
 		width: 20rem;
-		border: 1px solid black;
+		border: var(--border);
 	}
 	time {
 		display: block;
 	}
 	.forecast .header {
 		padding: 0.25em;
-		border-bottom: 1px solid black;
+		border-bottom: var(--border);
 	}
 	.direction {
 		text-align: right;
@@ -187,7 +192,7 @@
 		display: inline-block;
 	}
 	.temperature.highlight {
-		background-color: lightgoldenrodyellow;
+		background-color: hsl(30, 100%, 33%);
 	}
 	/* code {
 		white-space: pre;
