@@ -8,6 +8,7 @@
 	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
 	import SettingsIcon from '$lib/components/SettingsIcon.svelte';
 	import CloseIcon from '$lib/components/CloseIcon.svelte';
+	import DirectionArrow from '$lib/components/DirectionArrow.svelte';
 
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -110,8 +111,9 @@
 						<div class="speed">
 							{useMph ? knotsToMph(sounding.speed) : sounding.speed}
 						</div>
-						<div>
-							<div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div>
+						<div class="direction">
+							<!-- <div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div> -->
+							<DirectionArrow style={`transform: rotate(${sounding.direction}deg`} />
 						</div>
 						<div class="direction">
 							{sounding.direction}°
@@ -172,7 +174,9 @@
 		padding: 0.5em 0 0.5em 0;
 	}
 	.grid-container.inner div {
-		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.forecast {
 		width: 20rem;
@@ -184,12 +188,6 @@
 	.forecast .header {
 		padding: 0.25em;
 		border-bottom: var(--border);
-	}
-	.direction {
-		text-align: right;
-	}
-	.arrow {
-		display: inline-block;
 	}
 	.temperature.highlight {
 		background-color: hsl(30, 100%, 33%);

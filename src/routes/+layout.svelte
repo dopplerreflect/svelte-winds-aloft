@@ -18,7 +18,7 @@
 	:root::-webkit-scrollbar {
 		display: none;
 	}
-	svg {
+	svg.icon {
 		width: var(--header-height);
 		height: var(--header-height);
 		stroke: var(--svg-stroke-color);
