@@ -126,32 +126,6 @@
 	:root {
 		--header-height: 3em;
 	}
-	:root::-webkit-scrollbar {
-		display: none;
-	}
-	.centered {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	header {
-		display: grid;
-		grid-template-columns: var(--header-height) 1fr var(--header-height);
-		position: sticky;
-		top: 0;
-		height: var(--header-height);
-		width: 100vw;
-		color: white;
-		background-color: hsla(210, 100%, 15%, 0.85);
-		gap: 0.5em;
-	}
-	header button {
-		background-color: transparent;
-		border: 0;
-	}
-	header img {
-		height: var(--header-height);
-	}
 	nav {
 		display: block;
 		position: fixed;

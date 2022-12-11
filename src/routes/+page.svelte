@@ -1,14 +1,13 @@
 <script type="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
 	let submitButton: HTMLButtonElement;
 	let lat = 33.9769;
 	let lon = -85.1703;
-	let alt = 0;
 	let status = '';
-	$: latlon = [lat, lon, alt].join(',');
+	$: latlon = [lat, lon].join(',');
 	$: valid = latlon.match(/^[\d]+\.[\d]+[, ]*[-]?[\d]+\.[\d]+[, \d]*/);
 	$: coords = latlon
 		.replace(/ /g, '')
@@ -79,7 +78,6 @@
 	<div />
 	<div class="centered">{status ? status : latlon}</div>
 	<div>
-		<!-- <a href={`/${latlon}`}><img class="icon" src="/arrow-icon.svg" alt="go" /></a> -->
 		<button on:click={handleSubmit}>
 			<img class="icon" src="/arrow-icon.svg" alt="go" />
 		</button>
@@ -89,31 +87,6 @@
 <div id="map" />
 
 <style>
-	:root {
-		--header-height: 3em;
-	}
-	.centered {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	header {
-		display: grid;
-		grid-template-columns: var(--header-height) 1fr var(--header-height);
-		position: sticky;
-		top: 0;
-		height: var(--header-height);
-		z-index: 2;
-		color: white;
-		background-color: hsla(210, 100%, 15%, 0.85);
-	}
-	header button {
-		background-color: transparent;
-		border: 0;
-	}
-	.icon {
-		height: var(--header-height);
-	}
 	#map {
 		position: absolute;
 		top: 0;
