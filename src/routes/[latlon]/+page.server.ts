@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { parseForecastText } from '../../lib/server/forecast-parser';
 import { N_HRS } from '$lib/constants';
@@ -24,12 +25,16 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const url = `https://rucsoundings.noaa.gov/get_soundings.cgi?${queryString}`;
 
-	const result = await fetch(url);
-	const text = await result.text();
-
-	const forecasts = parseForecastText(text);
-
-	return { forecasts, alt: Math.round(Number(alt)) };
+	try {
+		const result = await fetch(url);
+		const text = await result.text();
+		const forecasts = parseForecastText(text);
+		return { forecasts, alt: Math.round(Number(alt)) };
+	} catch (err) {
+		throw error(500, {
+			message: 'Could not fetch winds aloft data. Are we online?'
+		});
+	}
 };
 
 /** from docs 
