@@ -79,8 +79,7 @@
 	<div />
 	<div class="centered">{status ? status : latlon}</div>
 	<div>
-		<button on:click={handleSubmit}>
-			<!-- <img class="icon" src="/arrow-icon.svg" alt="go" /> -->
+		<button bind:this={submitButton} on:click={handleSubmit}>
 			<ArrowIcon />
 		</button>
 	</div>
