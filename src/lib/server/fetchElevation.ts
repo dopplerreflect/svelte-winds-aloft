@@ -1,4 +1,4 @@
-export const setElevation = async (lat: number, lon: number) => {
+export const fetchElevation = async (lat: string, lon: string) => {
 	const queryStr = Object.entries({
 		x: lon,
 		y: lat,

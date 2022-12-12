@@ -1,9 +1,6 @@
 <script type="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-
 	import { metersToFeet, knotsToMph, toLocalTime, celsiusToFarenheit } from '$lib/conversions';
-	import { setElevation } from '$lib/setElevation';
 	import ToggleSwitch from '$lib/components/ToggleSwitch.svelte';
 	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
 	import SettingsIcon from '$lib/components/SettingsIcon.svelte';
@@ -14,16 +11,6 @@
 	export let data: PageData;
 
 	let status = '';
-	onMount(async () => {
-		if (data.alt === 0) {
-			let [lat, lon] = data.forecasts[0].latlon.split(',').map((n) => Number(n));
-			status = 'Fetching elevation';
-			data.alt = await setElevation(lat, lon);
-			data = data;
-			status = '';
-		}
-	});
-
 	let navVisible = false;
 	let useFeet = true;
 	let useMph = true;
@@ -112,7 +99,6 @@
 							{useMph ? knotsToMph(sounding.speed) : sounding.speed}
 						</div>
 						<div class="direction">
-							<!-- <div class="arrow" style="transform:rotate({sounding.direction}deg)">ᐁ</div> -->
 							<DirectionArrow style={`transform: rotate(${sounding.direction}deg`} />
 						</div>
 						<div class="direction">
