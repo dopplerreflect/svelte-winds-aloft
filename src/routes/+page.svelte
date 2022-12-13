@@ -49,7 +49,7 @@
 			 */
 			const leaflet = await import('leaflet');
 			let map = leaflet
-				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center', zoomControl: true })
+				.map('map', { scrollWheelZoom: 'center', touchZoom: 'center', zoomControl: false })
 				.setView([lat, lon], zoom);
 			leaflet.control.zoom({ position: 'bottomright' }).addTo(map);
 			leaflet
