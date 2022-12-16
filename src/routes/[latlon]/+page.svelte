@@ -15,7 +15,7 @@
 	let useFeet = true;
 	let useMph = true;
 	let useFarenheit = true;
-	let useAGL = true;
+	let useAGL = data.alt > 0;
 	let filter5km = true;
 
 	$: heightLabel = useFeet ? `ft ${useAGL ? 'agl' : 'msl'}` : `m ${useAGL ? 'agl' : 'msl'}`;
