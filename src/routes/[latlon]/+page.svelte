@@ -93,7 +93,9 @@
 					<div />
 					{#each forecast.soundings.filter( (s) => (filter5km ? s.height < 5000 : s) ) as sounding, si}
 						<div class="height">
-							{useFeet ? metersToFeet(sounding.height - heightAGL) : sounding.height - heightAGL}
+							{useFeet
+								? metersToFeet(sounding.height - heightAGL)
+								: Math.round(sounding.height - heightAGL)}
 						</div>
 						<div class="speed">
 							{useMph ? knotsToMph(sounding.speed) : sounding.speed}
@@ -116,9 +118,20 @@
 	</div>
 </main>
 
-<!-- <div>
-	<code>{JSON.stringify(data, null, 2)}</code>
-</div> -->
+<details>
+	<summary>Raw Data</summary>
+	{#each data.forecasts as forecast}
+		<code>{forecast.forecastText}</code>
+	{/each}
+</details>
+
+<details>
+	<summary>Parsed Data</summary>
+	{#each data.forecasts as forecast}
+		<code>{JSON.stringify(forecast, null, 2)}</code>
+	{/each}
+</details>
+
 <style>
 	:root {
 		--header-height: 3em;
@@ -178,7 +191,8 @@
 	.temperature.highlight {
 		background-color: hsl(30, 100%, 33%);
 	}
-	/* code {
+	code {
+		display: block;
 		white-space: pre;
-	} */
+	}
 </style>
