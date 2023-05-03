@@ -2,18 +2,16 @@ export const fetchElevation = async (lat: string, lon: string) => {
 	const queryStr = Object.entries({
 		x: lon,
 		y: lat,
-		units: 'Meters',
-		output: 'json'
+		units: 'Meters'
 	})
 		.map((e) => e.join('='))
 		.join('&');
 
-	const url = `https://nationalmap.gov/epqs/pqs.php?${queryStr}`;
-	console.log(url);
+	const url = `https://epqs.nationalmap.gov/v1/json?${queryStr}`;
 	try {
 		const response = await fetchWithTimeout(url, { timeout: 2000 });
 		const json = await response.json();
-		return json.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation;
+		return Math.round(json.value);
 	} catch (e) {
 		console.log(e);
 		return 0;
